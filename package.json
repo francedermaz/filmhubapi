@@ -13,7 +13,7 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "migrate": "prisma migrate deploy",
+    "postinstall": "prisma migrate deploy",
     "dev": "nodemon src/index.js"
   }
 }
