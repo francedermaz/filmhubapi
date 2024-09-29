@@ -58,7 +58,7 @@ export const saveFavorite = async (req, res) => {
     if (existingFavorite) {
       return res.status(400).json({ error: "La película ya está en la lista de favoritas" });
     }
-    
+
     const favorite = await prisma.favorite.create({
       data: {
         movieId,
@@ -99,4 +99,8 @@ export const getFavorites = async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Error al obtener favoritas" });
   }
+};
+
+export const getHealtz = (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'Service is running' });
 };
