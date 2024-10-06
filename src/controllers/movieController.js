@@ -70,8 +70,13 @@ export const getMovieById = async (req, res) => {
     if (movieResponse.status !== 200) {
       return res.status(404).json({ error: "Película no encontrada en TMDB" });
     }
+    const favoriteMovie = await prisma.favorite.findFirst({
+      where: { movieId: movieId },
+    });
 
-    const mappedMovie = mapMovieResponse(movieResponse.data);
+    const isFavorite = !!favoriteMovie;
+
+    const mappedMovie = mapMovieResponse(movieResponse.data, isFavorite);
     res.json(mappedMovie);
   } catch (error) {
     console.error(error);
