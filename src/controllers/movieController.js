@@ -48,6 +48,42 @@ export const getMovies = async (req, res) => {
   }
 };
 
+export const getMovieById = async (req, res) => {
+  const { id } = req.params;
+  const language = req.query.language || "en-US";
+  const region = req.query.region || "US";
+
+  try {
+    const movieId = parseInt(id, 10);
+
+    const movieResponse = await axios.get(
+      `https://api.themoviedb.org/3/movie/${movieId}`,
+      {
+        params: {
+          api_key: API_KEY,
+          language: language,
+          region: region,
+        },
+      }
+    );
+
+    if (movieResponse.status !== 200) {
+      return res.status(404).json({ error: "Película no encontrada en TMDB" });
+    }
+
+    const mappedMovie = mapMovieResponse(movieResponse.data);
+    res.json(mappedMovie);
+  } catch (error) {
+    console.error(error);
+
+    if (error.response && error.response.status === 404) {
+      return res.status(404).json({ error: "Película no encontrada en TMDB" });
+    }
+
+    res.status(500).json({ error: "Error al obtener la película" });
+  }
+};
+
 export const saveFavorite = async (req, res) => {
   const { movieId } = req.body;
   try {
@@ -56,7 +92,9 @@ export const saveFavorite = async (req, res) => {
     });
 
     if (existingFavorite) {
-      return res.status(400).json({ error: "La película ya está en la lista de favoritas" });
+      return res
+        .status(400)
+        .json({ error: "La película ya está en la lista de favoritas" });
     }
 
     const favorite = await prisma.favorite.create({
@@ -102,5 +140,5 @@ export const getFavorites = async (req, res) => {
 };
 
 export const getHealtz = (req, res) => {
-  res.status(200).json({ status: 'ok', message: 'Service is running' });
+  res.status(200).json({ status: "ok", message: "Service is running" });
 };
