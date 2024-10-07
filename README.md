@@ -13,5 +13,6 @@ La API de FilmHub proporciona una interfaz para gestionar datos de películas ut
 ## Métodos Disponibles
 
 - `GET /api/movies`: Obtiene una lista de películas populares.
+- `GET /api/movies/{id}`: Obtiene el detalle de una película.
 - `POST /api/favorites`: Marca una película como favorita.
 - `GET /api/favorites`: Obtiene la lista de películas favoritas del usuario.
